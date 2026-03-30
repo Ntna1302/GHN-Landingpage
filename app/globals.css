@@ -1,0 +1,246 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    /* Fonts */
+    --font-heading: var(--font-be-vietnam), "Be Vietnam Pro", sans-serif;
+    --font-body: var(--font-inter), "Inter", sans-serif;
+    --font-sans: var(--font-inter), "Inter", sans-serif;
+
+    /* Shadcn tokens */
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+
+    /* Radius - shadcn base */
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* GHN Brand design tokens */
+@theme {
+    /* GHN Brand Colors */
+    --color-ghn-o1: #FF5200;
+    --color-ghn-o2: #F67700;
+    --color-ghn-o3: #F8B200;
+    --color-ghn-b1: #006FAD;
+    --color-ghn-b2: #009BE0;
+    --color-ghn-b3: #0055F4;
+    --color-ghn-navy: #0A1F44;
+    --color-ghn-navy-mid: #132E63;
+    --color-surface: #F5F7FA;
+    --color-surface-warm: #FFF8F3;
+    --color-surface-blue: #F0F7FF;
+
+    /* GHN Radius */
+    --radius-ghn-sm: 12px;
+    --radius-ghn-md: 16px;
+    --radius-ghn-lg: 24px;
+    --radius-ghn-xl: 32px;
+
+    /* Custom Animations */
+    --animate-marquee: marquee 22s linear infinite;
+    --animate-morphBlob: morphBlob 18s ease-in-out infinite;
+    --animate-gradientFlow: gradientFlow 5s ease infinite;
+    --animate-shimmer: shimmer 3s ease-in-out infinite;
+    --animate-ripple: ripple 2s ease-out infinite;
+    --animate-float: float 14s ease-in-out infinite;
+    --animate-particleUp: particleUp 10s linear infinite;
+    --animate-spinSlow: spinSlow 40s linear infinite;
+    --animate-spinSlowR: spinSlowR 35s linear infinite;
+    --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+    --animate-spinBorder: spinBorder 3s linear infinite;
+    --animate-glowPulse: glowPulse 2.5s ease-in-out infinite;
+    --animate-orbit: orbit 4s linear infinite;
+}
+
+/* Keyframe animations */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes morphBlob {
+    0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+    50% { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }
+    75% { border-radius: 60% 30% 60% 40% / 60% 40% 30% 70%; }
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+@keyframes ripple {
+    0% { box-shadow: 0 0 0 0 rgba(255, 82, 0, 0.3); }
+    100% { box-shadow: 0 0 0 18px rgba(255, 82, 0, 0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(25px, -35px) rotate(6deg); }
+}
+
+@keyframes particleUp {
+    0% { transform: translateY(0) scale(1); opacity: 0.5; }
+    100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+}
+
+@keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes spinSlowR {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+@keyframes spinBorder {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255, 82, 0, 0.25); }
+    50% { box-shadow: 0 8px 36px rgba(255, 82, 0, 0.45); }
+}
+
+@keyframes orbit {
+    from { transform: rotate(0deg) translateX(52px); }
+    to { transform: rotate(360deg) translateX(52px); }
+}
+
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.75rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+    html {
+        @apply font-sans;
+        scroll-behavior: smooth;
+    }
+}
+
+/* ── Noise overlay ────────────────────────────────── */
+.noise {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.018;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Custom scrollbar ─────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #FF5200; }
+
+/* ── Selection ────────────────────────────────────── */
+::selection { background: #FF5200; color: white; }
+
+/* ── Gradient text utility ────────────────────────── */
+.text-gradient-orange {
+    background: linear-gradient(135deg, #FF5200, #F67700, #F8B200);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientFlow 4s ease infinite;
+}
+
+.text-gradient-blue {
+    background: linear-gradient(135deg, #006FAD, #009BE0, #0055F4);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientFlow 4s ease infinite;
+}
