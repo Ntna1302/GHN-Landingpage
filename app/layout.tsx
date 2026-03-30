@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     'Nói lên — Để GHN lắng nghe — Để GHN thay đổi. Tham gia khảo sát mức độ gắn kết nhân viên năm 2026.',
   keywords: ['GHN', 'EES', 'RACE 2026', 'khảo sát nhân viên', 'employee engagement'],
   icons: {
-    icon: 'https://res.cloudinary.com/dtjghirnn/image/upload/v1774863548/LOGO_CHUAN_onyfcy.png',
+    icon: 'https://play-lh.googleusercontent.com/N9dXtItNr-JRoijGhWwGzr-Nt9S31QEnF2dKUjRzTp-TYOlA8NYbGTkFnNpyyzQgsotFp046XZmm2M39Xrw-Ng=w240-h480-rw',
   },
 }
 
