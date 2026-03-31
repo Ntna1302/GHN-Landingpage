@@ -7,19 +7,23 @@ import { Stats } from '@/components/sections/Stats'
 import { SurveyPortal } from '@/components/sections/SurveyPortal'
 import { Timeline } from '@/components/sections/Timeline'
 import { Support } from '@/components/sections/Support'
+import { SplashScreen } from '@/components/sections/SplashScreen'
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-x-hidden">
-      <Navbar />
-      <Hero />
-      <MarqueeStrip />
-      <TrustStrip />
-      <Stats />
-      <SurveyPortal />
-      <Timeline />
-      <Support />
-      <Footer />
-    </main>
+    <>
+      <SplashScreen />
+      <main className="min-h-screen overflow-x-hidden">
+        <Navbar />
+        <Hero />
+        <MarqueeStrip />
+        <TrustStrip />
+        <Stats />
+        <SurveyPortal />
+        <Timeline />
+        <Support />
+        <Footer />
+      </main>
+    </>
   )
 }

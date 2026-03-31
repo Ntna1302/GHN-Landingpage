@@ -28,7 +28,7 @@ export function SurveyModal({ open, onOpenChange, group }: SurveyModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md overflow-hidden rounded-[20px] border-0 p-0 shadow-2xl">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-md overflow-hidden rounded-[20px] border-0 p-0 shadow-2xl">
         {/* Top gradient accent */}
         <div className="h-1 w-full bg-gradient-to-r from-ghn-o1 via-ghn-o2 to-ghn-o3" />
 
@@ -65,20 +65,22 @@ export function SurveyModal({ open, onOpenChange, group }: SurveyModalProps) {
             </div>
           )}
 
-          <DialogFooter className="mt-5 flex flex-col gap-2 sm:flex-row">
+          <DialogFooter className="mt-6 flex flex-col gap-3">
+            <Button
+              onClick={handleConfirm}
+              size="lg"
+              className="h-14 w-full rounded-2xl bg-gradient-to-r from-ghn-o1 to-ghn-o2 text-base font-bold text-white shadow-lg shadow-ghn-o1/25 hover:shadow-ghn-o1/40 hover:brightness-110"
+            >
+              <ExternalLink className="mr-2 h-5 w-5" />
+              Đã hiểu, bắt đầu →
+            </Button>
             <Button
               variant="outline"
-              className="flex-1 rounded-[12px] border-gray-200 text-gray-600 hover:bg-gray-50"
+              size="lg"
+              className="h-12 w-full rounded-2xl border-gray-200 text-gray-500 hover:bg-gray-50"
               onClick={() => onOpenChange(false)}
             >
               Huỷ
-            </Button>
-            <Button
-              onClick={handleConfirm}
-              className="flex-1 rounded-[12px] bg-gradient-to-r from-ghn-o1 to-ghn-o2 text-white shadow-lg shadow-ghn-o1/25 hover:shadow-ghn-o1/40 hover:brightness-110"
-            >
-              <ExternalLink className="mr-1.5 h-4 w-4" />
-              Đã hiểu, bắt đầu →
             </Button>
           </DialogFooter>
         </div>

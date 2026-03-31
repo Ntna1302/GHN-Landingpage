@@ -147,11 +147,11 @@ export function Navbar() {
           <img
             src="https://res.cloudinary.com/dtjghirnn/image/upload/v1774863548/LOGO_CHUAN_onyfcy.png"
             alt="GHN Logo"
-            className="h-16 w-auto object-contain"
+            className="h-12 w-auto object-contain sm:h-14 lg:h-16"
           />
-          <div className="mx-3.5 h-9 w-[2px] rounded-full bg-gray-200" />
-          <div className="flex flex-col justify-center leading-tight">
-            <span className="hidden font-heading text-sm font-extrabold uppercase tracking-wide text-ghn-navy sm:block">
+          <div className="mx-3.5 hidden h-9 w-[2px] rounded-full bg-gray-200 sm:block" />
+          <div className="hidden flex-col justify-center leading-tight sm:flex">
+            <span className="font-heading text-sm font-extrabold uppercase tracking-wide text-ghn-navy">
               Chiến Dịch
             </span>
             <span className="font-heading text-[13px] font-bold uppercase tracking-[2.5px] text-ghn-o1">
@@ -177,19 +177,19 @@ export function Navbar() {
             </SheetTrigger>
 
             <SheetContent side="right" className="w-[280px] p-0">
-              <SheetHeader className="border-b border-gray-100 px-6 py-5">
-                <div className="flex items-center gap-0">
+              <SheetHeader className="border-b border-gray-100 px-5 py-4">
+                <div className="flex items-center gap-3">
                   <img
                     src="https://res.cloudinary.com/dtjghirnn/image/upload/v1774863548/LOGO_CHUAN_onyfcy.png"
                     alt="GHN Logo"
-                    className="h-12 w-auto object-contain"
+                    className="h-9 w-auto max-w-[100px] object-contain"
                   />
-                  <div className="mx-3 h-8 w-[2px] rounded-full bg-gray-200" />
+                  <div className="h-7 w-[2px] rounded-full bg-gray-200" />
                   <div className="flex flex-col leading-tight">
-                    <SheetTitle className="font-heading text-sm font-extrabold uppercase tracking-wide text-ghn-navy">
+                    <SheetTitle className="font-heading text-xs font-extrabold uppercase tracking-wide text-ghn-navy">
                       Chiến Dịch
                     </SheetTitle>
-                    <span className="text-[12px] font-bold uppercase tracking-[2.5px] text-ghn-o1">
+                    <span className="text-[11px] font-bold uppercase tracking-[2px] text-ghn-o1">
                       EES Survey 2026
                     </span>
                   </div>

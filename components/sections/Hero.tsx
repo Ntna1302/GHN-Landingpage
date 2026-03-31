@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ChevronDown, ClipboardList } from 'lucide-react'
+import { ClipboardList } from 'lucide-react'
 import { FloatingShapes } from '@/components/FloatingShapes'
 import { ParticleField } from '@/components/ParticleField'
 import { useMouseParallax } from '@/hooks/useMouseParallax'
@@ -34,7 +34,7 @@ export function Hero() {
   const { x: mouseX, y: mouseY } = useMouseParallax()
 
   return (
-    <section className="relative mt-[72px] flex min-h-[calc(100vh-72px)] items-center justify-center overflow-hidden bg-ghn-navy lg:mt-[90px] lg:min-h-[calc(100vh-90px)]">
+    <section className="relative mt-[72px] flex min-h-[calc(100dvh-72px)] items-center justify-center overflow-hidden bg-ghn-navy lg:mt-[90px] lg:min-h-[calc(100dvh-90px)]">
       {/* Background: radial gradient mesh */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -83,7 +83,7 @@ export function Hero() {
           {/* Title */}
           <motion.h1
             variants={slideUp}
-            className="font-heading text-[clamp(3rem,9vw,6.5rem)] font-black leading-[1.0] tracking-tight"
+            className="font-heading text-[clamp(2.4rem,9vw,6.5rem)] font-black leading-[1.0] tracking-tight"
           >
             <span className="text-white">EES RACE </span>
             <span className="text-gradient-orange">2026</span>
@@ -115,7 +115,7 @@ export function Hero() {
             <Button
               onClick={scrollToSurvey}
               size="lg"
-              className="animate-ripple relative min-w-[200px] rounded-full bg-gradient-to-r from-ghn-o1 to-ghn-o2 px-8 py-3 font-heading text-base font-bold text-white shadow-xl shadow-ghn-o1/30 transition-all hover:brightness-110 hover:shadow-ghn-o1/50"
+              className="animate-ripple relative w-full rounded-full bg-gradient-to-r from-ghn-o1 to-ghn-o2 px-8 py-3 font-heading text-base font-bold text-white shadow-xl shadow-ghn-o1/30 transition-all hover:brightness-110 hover:shadow-ghn-o1/50 sm:w-auto sm:min-w-[200px]"
             >
               Bắt Đầu Khảo Sát →
             </Button>
@@ -124,7 +124,7 @@ export function Hero() {
               size="lg"
               nativeButton={false}
               render={<a href="https://lookerstudio.google.com/" target="_blank" rel="noopener noreferrer" />}
-              className="min-w-[200px] rounded-full border-white/25 bg-white/8 px-8 py-3 font-heading text-base font-semibold text-white backdrop-blur-sm hover:bg-white/15 hover:border-white/40"
+              className="w-full rounded-full border-white/25 bg-white/8 px-8 py-3 font-heading text-base font-semibold text-white backdrop-blur-sm hover:bg-white/15 hover:border-white/40 sm:w-auto sm:min-w-[200px]"
             >
               <ClipboardList className="mr-2 h-4 w-4" />
               Xem Tiến Độ HR
@@ -155,7 +155,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.8, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex"
+        className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2"
       >
         <div className="h-10 w-[1.5px] animate-bounce bg-gradient-to-b from-white/0 via-white/40 to-white/0 rounded-full" />
         <span className="text-[10px] tracking-[4px] uppercase text-white/35">Cuộn xuống</span>

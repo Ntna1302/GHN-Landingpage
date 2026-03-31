@@ -7,7 +7,7 @@ export function Support() {
     <section className="bg-white py-20 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <ScrollReveal>
-          <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-ghn-navy via-ghn-navy-mid to-ghn-b1 p-10 text-center shadow-2xl shadow-ghn-navy/25">
+          <div className="relative overflow-hidden rounded-[20px] bg-gradient-to-br from-ghn-navy via-ghn-navy-mid to-ghn-b1 p-6 text-center shadow-2xl shadow-ghn-navy/25 sm:rounded-[28px] sm:p-10">
             {/* Decorative morphing blob */}
             <div
               className="animate-morphBlob pointer-events-none absolute -right-16 -top-16 h-[280px] w-[280px] rounded-full bg-ghn-o1/10 blur-2xl"
@@ -38,7 +38,7 @@ export function Support() {
               <Button
                 nativeButton={false}
                 render={<a href="https://t.me/ghneesrace" target="_blank" rel="noopener noreferrer" />}
-                className="min-w-[180px] rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white/20 hover:shadow-xl hover:shadow-white/10"
+                className="w-full rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white/20 hover:shadow-xl hover:shadow-white/10 sm:w-auto sm:min-w-[180px]"
                 variant="outline"
               >
                 <Send className="h-4 w-4" />
@@ -48,7 +48,7 @@ export function Support() {
               <Button
                 nativeButton={false}
                 render={<a href="mailto:ex@ghn.vn" />}
-                className="min-w-[180px] rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white/20 hover:shadow-xl hover:shadow-white/10"
+                className="w-full rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white/20 hover:shadow-xl hover:shadow-white/10 sm:w-auto sm:min-w-[180px]"
                 variant="outline"
               >
                 <Mail className="h-4 w-4" />

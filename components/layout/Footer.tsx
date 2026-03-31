@@ -4,11 +4,11 @@ export function Footer() {
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-[10px] bg-white/10 ring-1 ring-white/20">
+          <div className="rounded-xl bg-white p-2 shadow-md">
             <img
-              src="https://res.cloudinary.com/dtjghirnn/image/upload/f_auto,q_auto/LOGO_CHUAN_o0mrgb"
+              src="https://res.cloudinary.com/dtjghirnn/image/upload/v1774863548/LOGO_CHUAN_onyfcy.png"
               alt="GHN Logo"
-              className="h-8 w-8 object-contain brightness-0 invert"
+              className="h-8 w-auto object-contain"
             />
           </div>
           <div className="flex flex-col leading-none">

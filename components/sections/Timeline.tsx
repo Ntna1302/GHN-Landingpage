@@ -71,11 +71,11 @@ const dotVariants = {
 
 export function Timeline() {
   return (
-    <section className="overflow-hidden bg-surface-blue px-4 py-24 sm:px-6 lg:px-8">
+    <section className="overflow-hidden bg-surface-blue px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <ScrollReveal>
-          <div className="mb-16 text-center">
+          <div className="mb-10 text-center sm:mb-16">
             <p className="mb-2 font-body text-xs font-semibold uppercase tracking-[5px] text-ghn-b2">
               Quy trình 4 bước
             </p>

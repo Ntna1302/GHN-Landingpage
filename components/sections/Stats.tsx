@@ -11,7 +11,7 @@ const stats = [
 
 export function Stats() {
   return (
-    <section className="bg-surface py-20 px-4 sm:px-6 lg:px-8">
+    <section className="bg-surface py-14 px-4 sm:px-6 sm:py-20 lg:px-8">
       <div className="mx-auto max-w-5xl">
         {/* Section header */}
         <ScrollReveal>
@@ -29,7 +29,7 @@ export function Stats() {
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
           {stats.map((stat, i) => (
             <ScrollReveal key={i} delay={i * 0.1}>
-              <Card className="group relative overflow-hidden rounded-[20px] border-0 bg-white p-6 text-center shadow-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl">
+              <Card className="group relative overflow-hidden rounded-[20px] border-0 bg-white p-4 text-center shadow-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl sm:p-6">
                 {/* Accent top bar */}
                 {stat.accent && (
                   <div className="absolute inset-x-0 top-0 h-[3px] rounded-t-[20px] bg-gradient-to-r from-ghn-o1 to-ghn-o2" />

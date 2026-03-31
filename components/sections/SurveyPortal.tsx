@@ -33,7 +33,7 @@ export function SurveyPortal() {
   const office = surveyGroups.filter((g) => g.category === 'office')
 
   return (
-    <section id="survey-portal" className="bg-white py-24 px-4 sm:px-6 lg:px-8">
+    <section id="survey-portal" className="bg-white py-16 px-4 sm:px-6 sm:py-24 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {/* Section header */}
         <ScrollReveal>
