@@ -34,11 +34,37 @@ export function SplashScreen() {
   const [exiting, setExiting] = useState(false)
   const [typedCount, setTypedCount] = useState(0)
 
-  /* Show only once per browser session */
+  /* Show on every page load; back button re-shows splash */
   useEffect(() => {
-    if (!sessionStorage.getItem('ees_splash_seen')) {
+    const showSplash = () => {
       setShow(true)
+      setExiting(false)
+      setTypedCount(0)
       document.body.style.overflow = 'hidden'
+    }
+
+    showSplash()
+
+    // Push a history entry so the browser back button has somewhere to go
+    history.pushState({ splashContent: true }, '')
+
+    // popstate fires when user presses back — re-show splash
+    const handlePopState = () => {
+      showSplash()
+      history.pushState({ splashContent: true }, '')
+    }
+
+    // pageshow fires when page is restored from bfcache (back from external page)
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) showSplash()
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    window.addEventListener('pageshow', handlePageShow)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+      window.removeEventListener('pageshow', handlePageShow)
     }
   }, [])
 
@@ -66,7 +92,6 @@ export function SplashScreen() {
   const handleCTA = () => {
     setExiting(true)
     setTimeout(() => {
-      sessionStorage.setItem('ees_splash_seen', '1')
       document.body.style.overflow = ''
       setShow(false)
     }, EXIT_DURATION)

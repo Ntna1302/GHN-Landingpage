@@ -6,7 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Send, ExternalLink } from 'lucide-react'
@@ -28,15 +27,15 @@ export function SurveyModal({ open, onOpenChange, group }: SurveyModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-md overflow-hidden rounded-[20px] border-0 p-0 shadow-2xl">
+      <DialogContent className="w-[calc(100%-2rem)] max-h-[85vh] max-w-md overflow-y-auto rounded-[20px] border-0 p-0 shadow-2xl">
         {/* Top gradient accent */}
-        <div className="h-1 w-full bg-gradient-to-r from-ghn-o1 via-ghn-o2 to-ghn-o3" />
+        <div className="h-1 w-full flex-shrink-0 bg-gradient-to-r from-ghn-o1 via-ghn-o2 to-ghn-o3" />
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <DialogHeader className="items-center text-center">
             {/* Icon */}
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-ghn-o1 to-ghn-o2 shadow-lg shadow-ghn-o1/30">
-              <Send className="h-7 w-7 text-white" />
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-ghn-o1 to-ghn-o2 shadow-lg shadow-ghn-o1/30">
+              <Send className="h-5 w-5 text-white" />
             </div>
 
             <DialogTitle className="font-heading text-xl font-bold text-ghn-navy">
@@ -65,11 +64,11 @@ export function SurveyModal({ open, onOpenChange, group }: SurveyModalProps) {
             </div>
           )}
 
-          <DialogFooter className="mt-6 flex flex-col gap-3">
+          <div className="mt-4 flex flex-col gap-2">
             <Button
               onClick={handleConfirm}
               size="lg"
-              className="h-14 w-full rounded-2xl bg-gradient-to-r from-ghn-o1 to-ghn-o2 text-base font-bold text-white shadow-lg shadow-ghn-o1/25 hover:shadow-ghn-o1/40 hover:brightness-110"
+              className="h-12 w-full rounded-2xl bg-gradient-to-r from-ghn-o1 to-ghn-o2 text-sm font-bold text-white shadow-lg shadow-ghn-o1/25 hover:shadow-ghn-o1/40 hover:brightness-110"
             >
               <ExternalLink className="mr-2 h-5 w-5" />
               Đã hiểu, bắt đầu →
@@ -77,12 +76,12 @@ export function SurveyModal({ open, onOpenChange, group }: SurveyModalProps) {
             <Button
               variant="outline"
               size="lg"
-              className="h-12 w-full rounded-2xl border-gray-200 text-gray-500 hover:bg-gray-50"
+              className="h-10 w-full rounded-2xl border-gray-200 text-gray-500 hover:bg-gray-50"
               onClick={() => onOpenChange(false)}
             >
               Huỷ
             </Button>
-          </DialogFooter>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
