@@ -29,7 +29,7 @@ export function Support() {
               Cần hỗ trợ?
             </h2>
             <p className="relative mx-auto mt-3 max-w-[440px] text-[15px] leading-relaxed text-white/65">
-              Nếu bạn không chắc mình thuộc nhóm nào, hoặc gặp vấn đề kỹ thuật — đội EX Team
+               Nếu bạn không chắc mình thuộc nhóm nào, hoặc gặp vấn đề kỹ thuật — đội EX Team
               luôn sẵn sàng hỗ trợ.
             </p>
 

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/sheet'
 import { useScrolled } from '@/hooks/useScrolled'
 import { cn } from '@/lib/utils'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 
 function scrollToSurvey() {
@@ -130,6 +130,27 @@ function MagneticCTA({ onClick }: { onClick: () => void }) {
 export function Navbar() {
   const scrolled = useScrolled(10)
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [displayLabel, setDisplayLabel] = useState<string | null>(null)
+
+  const syncLabel = () => {
+    const role = sessionStorage.getItem('ees_role')
+    if (!role) return
+    setDisplayLabel(role === 'delivery' ? 'Khối Giao Nhận' : sessionStorage.getItem('ees_verified_email'))
+  }
+
+  useEffect(() => {
+    syncLabel()
+    window.addEventListener('ees_role_selected', syncLabel)
+    return () => window.removeEventListener('ees_role_selected', syncLabel)
+  }, [])
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('ees_verified_email')
+    sessionStorage.removeItem('ees_splash_seen')
+    sessionStorage.removeItem('ees_role')
+    sessionStorage.removeItem('ees_role_groups')
+    window.location.reload()
+  }
 
   return (
     <header
@@ -161,7 +182,19 @@ export function Navbar() {
         </a>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center md:flex">
+        <nav className="hidden items-center gap-3 md:flex">
+          {displayLabel && (
+            <div className="flex items-center gap-2 rounded-full border border-gray-100 bg-gray-50 px-3 py-1.5">
+              <span className="h-[6px] w-[6px] rounded-full bg-green-400" />
+              <span className="max-w-[160px] truncate text-xs text-gray-400">{displayLabel}</span>
+              <button
+                onClick={handleLogout}
+                className="text-xs font-medium text-ghn-o1 transition-opacity hover:opacity-70"
+              >
+                Đăng xuất
+              </button>
+            </div>
+          )}
           <AuroraLink />
           <MagneticCTA onClick={scrollToSurvey} />
         </nav>
@@ -220,6 +253,23 @@ export function Navbar() {
                     Khảo Sát Ngay →
                   </Button>
                 </div>
+
+                {displayLabel && (
+                  <div className="mt-3 border-t border-gray-100 pt-3">
+                    <div className="flex items-center justify-between rounded-[12px] bg-gray-50 px-4 py-2.5">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="h-[6px] w-[6px] flex-shrink-0 rounded-full bg-green-400" />
+                        <span className="truncate text-xs text-gray-400">{displayLabel}</span>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="ml-2 flex-shrink-0 text-xs font-medium text-ghn-o1 hover:opacity-70"
+                      >
+                        Đăng xuất
+                      </button>
+                    </div>
+                  </div>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

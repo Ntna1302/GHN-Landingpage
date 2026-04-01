@@ -8,11 +8,13 @@ import { SurveyPortal } from '@/components/sections/SurveyPortal'
 import { Timeline } from '@/components/sections/Timeline'
 import { Support } from '@/components/sections/Support'
 import { SplashScreen } from '@/components/sections/SplashScreen'
+import { RoleGate } from '@/components/sections/RoleGate'
 
 export default function Home() {
   return (
     <>
       <SplashScreen />
+      <RoleGate />
       <main className="min-h-screen overflow-x-hidden">
         <Navbar />
         <Hero />

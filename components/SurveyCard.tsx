@@ -22,9 +22,11 @@ interface SurveyCardProps {
   group: SurveyGroup
   onSelect: (group: SurveyGroup) => void
   index?: number
+  isHighlighted?: boolean
+  isMuted?: boolean
 }
 
-export function SurveyCard({ group, onSelect, index = 0 }: SurveyCardProps) {
+export function SurveyCard({ group, onSelect, index = 0, isHighlighted = false, isMuted = false }: SurveyCardProps) {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 })
   const [hovered, setHovered] = useState(false)
 
@@ -32,6 +34,7 @@ export function SurveyCard({ group, onSelect, index = 0 }: SurveyCardProps) {
   const IconComp = iconMap[group.icon as keyof typeof iconMap]
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMuted) return
     const rect = e.currentTarget.getBoundingClientRect()
     const x = (e.clientX - rect.left) / rect.width - 0.5
     const y = (e.clientY - rect.top) / rect.height - 0.5
@@ -47,20 +50,33 @@ export function SurveyCard({ group, onSelect, index = 0 }: SurveyCardProps) {
     <ScrollReveal delay={index * 0.08}>
       <motion.div
         onMouseMove={handleMouseMove}
-        onMouseEnter={() => setHovered(true)}
+        onMouseEnter={() => { if (!isMuted) setHovered(true) }}
         onMouseLeave={handleMouseLeave}
         animate={{
-          rotateX: tilt.rotateX,
-          rotateY: tilt.rotateY,
-          y: hovered ? -10 : 0,
+          rotateX: isMuted ? 0 : tilt.rotateX,
+          rotateY: isMuted ? 0 : tilt.rotateY,
+          y: (!isMuted && hovered) ? -10 : 0,
+          scale: isMuted ? 0.97 : 1,
         }}
         transition={{ type: 'spring', stiffness: 280, damping: 28 }}
         style={{ perspective: 700, transformStyle: 'preserve-3d' }}
-        className="group relative h-full"
+        className={`group relative h-full ${isMuted ? 'opacity-50 grayscale' : ''}`}
       >
+        {/* "Nhóm của bạn" badge */}
+        {isHighlighted && (
+          <div className="absolute -top-2.5 right-3 z-20 flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold shadow-md"
+            style={{ background: isOrange ? 'linear-gradient(to right,#FF5200,#F67700)' : 'linear-gradient(to right,#0055F4,#009BE0)', color: '#fff' }}
+          >
+            <span className="h-[5px] w-[5px] animate-pulse rounded-full bg-white/80" />
+            Nhóm của bạn
+          </div>
+        )}
+
         {/* Animated top gradient bar */}
         <div
-          className={`pointer-events-none absolute inset-x-0 top-0 z-10 h-0 rounded-t-[16px] transition-all duration-300 group-hover:h-[4px] ${
+          className={`pointer-events-none absolute inset-x-0 top-0 z-10 rounded-t-[16px] transition-all duration-300 ${
+            isHighlighted ? 'h-[3px]' : 'h-0 group-hover:h-[4px]'
+          } ${
             isOrange
               ? 'bg-gradient-to-r from-ghn-o1 via-ghn-o2 to-ghn-o3'
               : 'bg-gradient-to-r from-ghn-b1 via-ghn-b2 to-ghn-b3'
@@ -69,11 +85,15 @@ export function SurveyCard({ group, onSelect, index = 0 }: SurveyCardProps) {
 
         <Card
           className={`relative h-full overflow-hidden rounded-[16px] border transition-all duration-300 ${
-            hovered
+            isHighlighted
               ? isOrange
-                ? 'border-ghn-o1/30 shadow-2xl shadow-ghn-o1/15'
-                : 'border-ghn-b2/30 shadow-2xl shadow-ghn-b2/15'
-              : 'border-gray-100 shadow-md'
+                ? 'border-ghn-o1/40 shadow-xl shadow-ghn-o1/15 ring-1 ring-ghn-o1/30'
+                : 'border-ghn-b2/40 shadow-xl shadow-ghn-b2/15 ring-1 ring-ghn-b2/30'
+              : hovered
+                ? isOrange
+                  ? 'border-ghn-o1/30 shadow-2xl shadow-ghn-o1/15'
+                  : 'border-ghn-b2/30 shadow-2xl shadow-ghn-b2/15'
+                : 'border-gray-100 shadow-md'
           } bg-white`}
         >
           {/* Inner glow on hover */}
