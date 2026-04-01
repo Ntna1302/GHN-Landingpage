@@ -148,7 +148,7 @@ export function SurveyCard({ group, onSelect, index = 0, isHighlighted = false, 
 
           <CardFooter className="pt-2 pb-5">
             <Button
-              onClick={() => onSelect(group)}
+              onClick={!isMuted ? () => onSelect(group) : undefined}
               variant="outline"
               className={`group/btn relative w-full overflow-hidden rounded-[12px] border font-semibold transition-all duration-300 ${
                 isOrange

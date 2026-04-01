@@ -54,77 +54,7 @@ const orbitParticles = [
   { duration: '7s',   delay: '-4.67s' },
 ]
 
-/* ── Magnetic CTA button ─────────────────────────────────── */
-function MagneticCTA({ onClick }: { onClick: () => void }) {
-  const zoneRef = useRef<HTMLDivElement>(null)
-  const [pos, setPos] = useState({ x: 0, y: 0 })
-  const [hovered, setHovered] = useState(false)
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!zoneRef.current) return
-    const rect = zoneRef.current.getBoundingClientRect()
-    setPos({
-      x: (e.clientX - rect.left - rect.width / 2) * 0.15,
-      y: (e.clientY - rect.top - rect.height / 2) * 0.15,
-    })
-  }
-
-  const handleMouseLeave = () => {
-    setPos({ x: 0, y: 0 })
-    setHovered(false)
-  }
-
-  return (
-    /* Invisible magnetic zone: -m-10 creates the 40px capture radius */
-    <div
-      ref={zoneRef}
-      className="relative -m-8 p-8"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={() => setHovered(true)}
-    >
-      {/* Spring-animated inner — carries both particles + button */}
-      <motion.div
-        animate={{ x: pos.x, y: pos.y }}
-        transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-        className="relative inline-flex"
-      >
-        {/* Orbit particles */}
-        {orbitParticles.map((p, i) => (
-          <div
-            key={i}
-            className="animate-orbit pointer-events-none absolute left-1/2 top-1/2 -ml-[2px] -mt-[2px] h-1 w-1 rounded-full bg-ghn-o1/60"
-            style={{ animationDuration: p.duration, animationDelay: p.delay }}
-          />
-        ))}
-
-        {/* Button */}
-        <motion.button
-          onClick={onClick}
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-          className="animate-glowPulse relative cursor-pointer overflow-hidden rounded-full bg-gradient-to-r from-ghn-o1 to-ghn-o2 px-5 py-[7px] text-sm font-bold text-white"
-        >
-          {/* Shimmer sweep */}
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="animate-shimmer absolute inset-y-0 w-[40%] -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-          </div>
-
-          {/* Label + arrow */}
-          <span className="relative flex items-center gap-1.5">
-            Khảo Sát Ngay
-            <motion.span
-              animate={{ x: hovered ? 5 : 0 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            >
-              →
-            </motion.span>
-          </span>
-        </motion.button>
-      </motion.div>
-    </div>
-  )
-}
 
 /* ── Navbar ──────────────────────────────────────────────── */
 export function Navbar() {
@@ -196,7 +126,7 @@ export function Navbar() {
             </div>
           )}
           <AuroraLink />
-          <MagneticCTA onClick={scrollToSurvey} />
+
         </nav>
 
         {/* Mobile hamburger */}

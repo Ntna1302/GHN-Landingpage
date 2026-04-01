@@ -7,6 +7,7 @@ import { ClipboardList } from 'lucide-react'
 import { FloatingShapes } from '@/components/FloatingShapes'
 import { ParticleField } from '@/components/ParticleField'
 import { useMouseParallax } from '@/hooks/useMouseParallax'
+import { useRef, useState } from 'react'
 
 const containerVariants = {
   hidden: {},
@@ -29,7 +30,67 @@ const slideUp = {
 function scrollToSurvey() {
   document.getElementById('survey-portal')?.scrollIntoView({ behavior: 'smooth' })
 }
+function MagneticCTA({ onClick }: { onClick: () => void }) {
+  const zoneRef = useRef<HTMLDivElement>(null)
+  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const [hovered, setHovered] = useState(false)
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!zoneRef.current) return
+    const rect = zoneRef.current.getBoundingClientRect()
+    setPos({
+      x: (e.clientX - rect.left - rect.width / 2) * 0.15,
+      y: (e.clientY - rect.top - rect.height / 2) * 0.15,
+    })
+  }
+
+  const handleMouseLeave = () => {
+    setPos({ x: 0, y: 0 })
+    setHovered(false)
+  }
+
+  return (
+    <div
+      ref={zoneRef}
+      className="relative -m-8 p-8"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setHovered(true)}
+    >
+      <motion.div
+        animate={{ x: pos.x, y: pos.y }}
+        transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+        className="relative inline-flex"
+      >
+        {/* particles */}
+        {[{ duration: '4s', delay: '0s' }].map((p, i) => (
+          <div
+            key={i}
+            className="animate-orbit pointer-events-none absolute left-1/2 top-1/2 -ml-[2px] -mt-[2px] h-1 w-1 rounded-full bg-ghn-o1/60"
+            style={{ animationDuration: p.duration, animationDelay: p.delay }}
+          />
+        ))}
+
+        <motion.button
+          onClick={onClick}
+          whileHover={{ scale: 1.05 }}
+          className="animate-glowPulse relative overflow-hidden rounded-full bg-gradient-to-r from-ghn-o1 to-ghn-o2 px-6 py-3 font-heading text-base font-bold text-white"
+        >
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="animate-shimmer absolute inset-y-0 w-[40%] -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          </div>
+
+          <span className="relative flex items-center gap-2">
+            Khảo Sát Ngay
+            <motion.span animate={{ x: hovered ? 5 : 0 }}>
+              →
+            </motion.span>
+          </span>
+        </motion.button>
+      </motion.div>
+    </div>
+  )
+}
 export function Hero() {
   const { x: mouseX, y: mouseY } = useMouseParallax()
 
@@ -93,42 +154,26 @@ export function Hero() {
           <motion.p
             variants={slideUp}
             className="mx-auto mt-6 max-w-[600px] font-body text-[clamp(1rem,2.5vw,1.2rem)] leading-relaxed text-white/70"
-          >
+          >   Mỗi {' '}
             <strong className="relative text-white after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[2px] after:bg-ghn-o1/60 after:rounded-full">
-              Nói lên
+               ý kiến
             </strong>{' '}
-            — Để GHN{' '}
+            — Mỗi {' '}
             <strong className="relative text-white after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[2px] after:bg-ghn-b2/60 after:rounded-full">
-              lắng nghe
+              bước tiến
             </strong>{' '}
-            — Để GHN{' '}
-            <strong className="relative text-white after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[2px] after:bg-ghn-o3/60 after:rounded-full">
-              thay đổi
+            — {' '}Cho{' '}
+            <strong className="relative text-white after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[2px] after:bg-ghn-o3/60 after:rounded-full  ">
+                GiaoHangNhanh
             </strong>
           </motion.p>
 
           {/* CTAs */}
           <motion.div
             variants={slideUp}
-            className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
+            className="mt-10 flex items-center justify-center"
           >
-            <Button
-              onClick={scrollToSurvey}
-              size="lg"
-              className="animate-ripple relative w-full rounded-full bg-gradient-to-r from-ghn-o1 to-ghn-o2 px-8 py-3 font-heading text-base font-bold text-white shadow-xl shadow-ghn-o1/30 transition-all hover:brightness-110 hover:shadow-ghn-o1/50 sm:w-auto sm:min-w-[200px]"
-            >
-              Bắt Đầu Khảo Sát →
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              nativeButton={false}
-              render={<a href="https://lookerstudio.google.com/" target="_blank" rel="noopener noreferrer" />}
-              className="w-full rounded-full border-white/25 bg-white/8 px-8 py-3 font-heading text-base font-semibold text-white backdrop-blur-sm hover:bg-white/15 hover:border-white/40 sm:w-auto sm:min-w-[200px]"
-            >
-              <ClipboardList className="mr-2 h-4 w-4" />
-              Xem Tiến Độ HR
-            </Button>
+            <MagneticCTA onClick={scrollToSurvey} />
           </motion.div>
 
           {/* Stats preview */}
