@@ -18,6 +18,20 @@ interface SurveyModalProps {
 }
 
 export function SurveyModal({ open, onOpenChange, group }: SurveyModalProps) {
+  const isOrange = !group || group.theme === 'orange'
+
+  const topBar = isOrange
+    ? 'bg-gradient-to-r from-ghn-o1 via-ghn-o2 to-ghn-o3'
+    : 'bg-gradient-to-r from-ghn-b1 via-ghn-b2 to-ghn-b3'
+
+  const iconBg = isOrange
+    ? 'bg-gradient-to-br from-ghn-o1 to-ghn-o2 shadow-ghn-o1/30'
+    : 'bg-gradient-to-br from-ghn-b1 to-ghn-b2 shadow-ghn-b2/30'
+
+  const primaryBtn = isOrange
+    ? 'bg-gradient-to-r from-ghn-o1 to-ghn-o2 shadow-ghn-o1/25 hover:shadow-ghn-o1/40'
+    : 'bg-gradient-to-r from-ghn-b1 to-ghn-b2 shadow-ghn-b2/25 hover:shadow-ghn-b2/40'
+
   const handleConfirm = () => {
     if (group?.link) {
       window.open(group.link, '_blank', 'noopener,noreferrer')
@@ -28,13 +42,15 @@ export function SurveyModal({ open, onOpenChange, group }: SurveyModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[calc(100%-2rem)] max-h-[85vh] max-w-md overflow-y-auto rounded-[20px] border-0 p-0 shadow-2xl">
-        {/* Top gradient accent */}
-        <div className="h-1 w-full flex-shrink-0 bg-gradient-to-r from-ghn-o1 via-ghn-o2 to-ghn-o3" />
+        {/* Top accent bar */}
+        <div className={`h-1 w-full flex-shrink-0 ${topBar}`} />
 
         <div className="p-4 sm:p-6">
           <DialogHeader className="items-center text-center">
             {/* Icon */}
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-ghn-o1 to-ghn-o2 shadow-lg shadow-ghn-o1/30">
+            <div
+              className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full shadow-lg ${iconBg}`}
+            >
               <Send className="h-5 w-5 text-white" />
             </div>
 
@@ -68,7 +84,7 @@ export function SurveyModal({ open, onOpenChange, group }: SurveyModalProps) {
             <Button
               onClick={handleConfirm}
               size="lg"
-              className="h-12 w-full rounded-2xl bg-gradient-to-r from-ghn-o1 to-ghn-o2 text-sm font-bold text-white shadow-lg shadow-ghn-o1/25 hover:shadow-ghn-o1/40 hover:brightness-110"
+              className={`h-12 w-full rounded-2xl text-sm font-bold text-white shadow-lg hover:brightness-110 ${primaryBtn}`}
             >
               <ExternalLink className="mr-2 h-5 w-5" />
               Đã hiểu, bắt đầu →

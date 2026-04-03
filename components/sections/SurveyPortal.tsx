@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { surveyGroups, SurveyGroup } from '@/lib/survey-data'
 import { SurveyCard } from '@/components/SurveyCard'
 import { SurveyModal } from '@/components/SurveyModal'
 import { ScrollReveal } from '@/components/ScrollReveal'
-import { Truck, Users, Star, LayoutGrid } from 'lucide-react'
+import { Star, LayoutGrid, RotateCcw } from 'lucide-react'
 
 /* ── Section divider ────────────────────────────────────── */
 function GroupDivider({
@@ -34,50 +35,42 @@ function GroupDivider({
 export function SurveyPortal() {
   const [selectedGroup, setSelectedGroup] = useState<SurveyGroup | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
-  const [userGroups, setUserGroups] = useState<string[] | null>(null)
+  const [userGroupId, setUserGroupId] = useState<string | null>(null)
 
   useEffect(() => {
-    const stored = sessionStorage.getItem('ees_role_groups')
-    if (stored) {
-      setUserGroups(stored.split(',').map((g) => g.trim()))
-    }
+    const stored = sessionStorage.getItem('ees_role_group')
+    if (stored) setUserGroupId(stored.trim())
   }, [])
 
-  // Re-read sessionStorage immediately when RoleGate completes (same render cycle)
   useEffect(() => {
     const handler = () => {
-      const stored = sessionStorage.getItem('ees_role_groups')
-      if (stored) setUserGroups(stored.split(',').map((g) => g.trim()))
+      const stored = sessionStorage.getItem('ees_role_group')
+      if (stored) setUserGroupId(stored.trim())
     }
     window.addEventListener('ees_role_selected', handler)
     return () => window.removeEventListener('ees_role_selected', handler)
   }, [])
 
-const handleSelect = (group: SurveyGroup) => {
+  const handleSelect = (group: SurveyGroup) => {
     setSelectedGroup(group)
     setModalOpen(true)
   }
 
-  // No role stored — render original layout
-  if (!userGroups) {
-    const operations = surveyGroups.filter((g) => g.category === 'operations')
-    const office = surveyGroups.filter((g) => g.category === 'office')
+  const handleReset = () => {
+    sessionStorage.removeItem('ees_role_group')
+    sessionStorage.removeItem('ees_splash_seen')
+    sessionStorage.removeItem('ees_role')
+    window.location.reload()
+  }
 
+  /* ── No role selected: all 6 cards equally ── */
+  if (!userGroupId) {
     return (
       <section id="survey-portal" className="bg-white px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <SectionHeader />
-
-          <GroupDivider label="Khối Vận Hành & Tuyến Đầu" icon={Truck} />
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {operations.map((group, i) => (
-              <SurveyCard key={group.id} group={group} onSelect={handleSelect} index={i} />
-            ))}
-          </div>
-
-          <GroupDivider label="Khối Văn Phòng & Quản Lý" icon={Users} />
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {office.map((group, i) => (
+          <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {surveyGroups.map((group, i) => (
               <SurveyCard key={group.id} group={group} onSelect={handleSelect} index={i} />
             ))}
           </div>
@@ -88,46 +81,68 @@ const handleSelect = (group: SurveyGroup) => {
     )
   }
 
-  // Role stored — show personalised layout
-  const matched = surveyGroups.filter((g) => userGroups.includes(g.id))
-  const unmatched = surveyGroups.filter((g) => !userGroups.includes(g.id))
+  /* ── Role selected: highlighted + muted sections ── */
+  const matched = surveyGroups.filter((g) => g.id === userGroupId)
+  const unmatched = surveyGroups.filter((g) => g.id !== userGroupId)
 
   return (
     <section id="survey-portal" className="bg-white px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <SectionHeader />
 
-        {/* Matched cards — user's groups */}
+        {/* ── Matched card ── */}
         <GroupDivider label="Khảo sát dành cho bạn" icon={Star} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={userGroupId}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className={`grid gap-5 ${
+              matched.length === 1
+                ? 'mx-auto max-w-sm'
+                : 'grid-cols-1 md:grid-cols-2'
+            }`}
+          >
+            {matched.map((group, i) => (
+              <SurveyCard
+                key={group.id}
+                group={group}
+                onSelect={handleSelect}
+                index={i}
+                isHighlighted
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* ── Other cards (display-only) ── */}
+        <GroupDivider label="Các nhóm khác" icon={LayoutGrid} />
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {matched.map((group, i) => (
+          {unmatched.map((group, i) => (
             <SurveyCard
               key={group.id}
               group={group}
-              onSelect={handleSelect}
+              onSelect={() => {}}
               index={i}
-              isHighlighted
+              isMuted
             />
           ))}
         </div>
 
-        {/* Unmatched cards */}
-        {unmatched.length > 0 && (
-          <>
-            <GroupDivider label="Các nhóm khác" icon={LayoutGrid} />
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {unmatched.map((group, i) => (
-                <SurveyCard
-                  key={group.id}
-                  group={group}
-                  onSelect={handleSelect}
-                  index={i}
-                  isMuted
-                />
-              ))}
-            </div>
-          </>
-        )}
+        {/* ── Reset button ── */}
+        <div className="mt-8 flex justify-center">
+          <p className="text-sm text-gray-400">
+            Bạn chọn sai nhóm?{' '}
+            <button
+              onClick={handleReset}
+              className="inline-flex items-center gap-1 text-ghn-o1/70 underline underline-offset-2 transition-colors hover:text-ghn-o1"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+              Hãy bấm vào đây
+            </button>
+          </p>
+        </div>
       </div>
 
       <SurveyModal open={modalOpen} onOpenChange={setModalOpen} group={selectedGroup} />

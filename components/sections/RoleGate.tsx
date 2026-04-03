@@ -2,56 +2,90 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Truck, PackageCheck, UserCog, ArrowLeft, ChevronRight } from 'lucide-react'
+import {
+  Bike,
+  Truck,
+  PackageCheck,
+  ShieldCheck,
+  LaptopMinimal,
+  UserCog,
+  Lock,
+  ArrowLeft,
+  ChevronRight,
+} from 'lucide-react'
 
 const LOGO_URL =
   'https://res.cloudinary.com/dtjghirnn/image/upload/v1774863548/LOGO_CHUAN_onyfcy.png'
 
 const EXIT_DURATION = 650
+const CORRECT_PASSWORD = 'GHN@2026'
 
-type RoleId = 'delivery' | 'warehouse' | 'office'
+type GroupId = '1A' | '1B' | '2A' | '2B' | '3A' | '3B'
 
-interface RoleOption {
-  id: RoleId
+interface GroupCard {
+  id: GroupId
   icon: React.ElementType
   title: string
   subtitle: string
   badge: string
-  groups: string
   accent: 'orange' | 'blue'
-  requiresEmail: boolean
+  requiresPassword: boolean
 }
 
-const ROLES: RoleOption[] = [
+const GROUP_CARDS: GroupCard[] = [
   {
-    id: 'delivery',
+    id: '1A',
+    icon: Bike,
+    title: 'Shipper / Giao Nhận',
+    subtitle: 'NVPTTT Tuyến, NVGN Giao Hàng Nặng (Freight)',
+    badge: 'Nhóm 1A',
+    accent: 'orange',
+    requiresPassword: false,
+  },
+  {
+    id: '1B',
     icon: Truck,
-    title: 'Khối Giao Nhận & Vận Tải',
-    subtitle: 'Shipper, Giao Nhận, Tài Xế xe tải GXT/TXXT',
-    badge: 'Nhóm 1A · 1B',
-    groups: '1A,1B',
+    title: 'Tài xế Vận tải',
+    subtitle: 'Tài xế xe tải chạy tuyến GXT & TXXT',
+    badge: 'Nhóm 1B',
     accent: 'orange',
-    requiresEmail: false,
+    requiresPassword: false,
   },
   {
-    id: 'warehouse',
+    id: '2A',
     icon: PackageCheck,
-    title: 'Khối Kho Bãi & Quản Lý Tuyến Đầu',
-    subtitle: 'NV Kho, Bưu cục, AM/OM, Supervisor',
-    badge: 'Nhóm 2A · 2B',
-    groups: '2A,2B',
+    title: 'Vận hành Kho & Bưu cục',
+    subtitle: 'NV Xử lý (Vùng), NV Phân Hàng, Admin Kho',
+    badge: 'Nhóm 2A',
     accent: 'orange',
-    requiresEmail: true,
+    requiresPassword: false,
   },
   {
-    id: 'office',
-    icon: UserCog,
-    title: 'Khối Văn Phòng & Quản Trị',
-    subtitle: 'Nhân viên HO, Manager, Director, C-Level',
-    badge: 'Nhóm 3A · 3B',
-    groups: '3A,3B',
+    id: '2B',
+    icon: ShieldCheck,
+    title: 'Quản lý Tuyến đầu',
+    subtitle: 'AM/OM, Supervisor, TBC, Ops Team Leader',
+    badge: 'Nhóm 2B',
+    accent: 'orange',
+    requiresPassword: false,
+  },
+  {
+    id: '3A',
+    icon: LaptopMinimal,
+    title: 'Nhân viên Văn phòng',
+    subtitle: 'Chuyên viên, nhân viên khối Indirect HO',
+    badge: 'Nhóm 3A',
     accent: 'blue',
-    requiresEmail: true,
+    requiresPassword: true,
+  },
+  {
+    id: '3B',
+    icon: UserCog,
+    title: 'Cấp Quản trị (Mid/Senior)',
+    subtitle: 'Manager & Director tại HO',
+    badge: 'Nhóm 3B',
+    accent: 'blue',
+    requiresPassword: true,
   },
 ]
 
@@ -68,12 +102,23 @@ const slideVariants = {
   }),
 }
 
-const slideTransition = { duration: 0.32, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }
+const slideTransition = {
+  duration: 0.32,
+  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+}
 
-/* ── Role card ─────────────────────────────────────────── */
-function RoleCard({ role, onSelect }: { role: RoleOption; onSelect: () => void }) {
-  const isOrange = role.accent === 'orange'
-  const Icon = role.icon
+/* ── Group card item ────────────────────────────────────── */
+function GroupCardItem({
+  card,
+  onSelect,
+  index,
+}: {
+  card: GroupCard
+  onSelect: () => void
+  index: number
+}) {
+  const isOrange = card.accent === 'orange'
+  const Icon = card.icon
 
   const glowShadow = isOrange
     ? '0 8px 36px rgba(255,82,0,0.28)'
@@ -85,12 +130,21 @@ function RoleCard({ role, onSelect }: { role: RoleOption; onSelect: () => void }
 
   return (
     <motion.button
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       onClick={onSelect}
-      whileHover={{ scale: 1.03, y: -5, boxShadow: glowShadow }}
+      whileHover={{ scale: 1.02, y: -4, boxShadow: glowShadow }}
       whileTap={{ scale: 0.98 }}
-      transition={{ type: 'spring', stiffness: 280, damping: 22 }}
       className="group relative flex flex-col items-center rounded-[20px] border border-white/10 bg-white/[0.05] p-6 text-center backdrop-blur-sm transition-colors hover:border-white/20 hover:bg-white/[0.09]"
     >
+      {/* Lock icon for password-required groups */}
+      {card.requiresPassword && (
+        <div className="absolute right-3 top-3">
+          <Lock className="h-3.5 w-3.5 text-blue-400/60" />
+        </div>
+      )}
+
       {/* Icon */}
       <div
         className="mb-4 flex h-14 w-14 items-center justify-center rounded-[16px] transition-transform duration-300 group-hover:scale-110"
@@ -100,19 +154,19 @@ function RoleCard({ role, onSelect }: { role: RoleOption; onSelect: () => void }
       </div>
 
       {/* Title */}
-      <h3 className="mb-2 font-heading text-[15px] font-bold leading-snug text-white">
-        {role.title}
+      <h3 className="mb-2 font-heading text-[14px] font-bold leading-snug text-white">
+        {card.title}
       </h3>
 
       {/* Subtitle */}
-      <p className="mb-5 text-xs leading-relaxed text-white/45">{role.subtitle}</p>
+      <p className="mb-5 text-[11px] leading-relaxed text-white/45">{card.subtitle}</p>
 
       {/* Badge */}
       <div
         className="mt-auto rounded-full px-3 py-1 text-[11px] font-bold"
         style={{ backgroundColor: badgeBg, color: badgeColor }}
       >
-        {role.badge}
+        {card.badge}
       </div>
 
       {/* Arrow hint */}
@@ -125,16 +179,16 @@ function RoleCard({ role, onSelect }: { role: RoleOption; onSelect: () => void }
 export function RoleGate() {
   const [show, setShow] = useState(false)
   const [exiting, setExiting] = useState(false)
-  const [step, setStep] = useState<'role' | 'email'>('role')
+  const [step, setStep] = useState<'cards' | 'password'>('cards')
   const [direction, setDirection] = useState<'forward' | 'back'>('forward')
-  const [selectedRole, setSelectedRole] = useState<RoleOption | null>(null)
-  const [email, setEmail] = useState('')
+  const [selectedCard, setSelectedCard] = useState<GroupCard | null>(null)
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const gateExited = useRef(false)
 
   useEffect(() => {
-    if (!sessionStorage.getItem('ees_role')) {
+    if (!sessionStorage.getItem('ees_role_group')) {
       setShow(true)
       document.body.style.overflow = 'hidden'
     }
@@ -145,68 +199,60 @@ export function RoleGate() {
     const handlePopState = () => {
       if (!gateExited.current) return
       gateExited.current = false
-      sessionStorage.removeItem('ees_role')
-      sessionStorage.removeItem('ees_role_groups')
-      sessionStorage.removeItem('ees_verified_email')
+      sessionStorage.removeItem('ees_role_group')
       setShow(true)
       setExiting(false)
-      setStep('role')
-      setSelectedRole(null)
-      setEmail('')
+      setStep('cards')
+      setSelectedCard(null)
+      setPassword('')
       setError('')
       setSuccess(false)
       document.body.style.overflow = 'hidden'
-      // Re-push so the next back press is also caught
       history.pushState(null, '')
     }
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
-  const handleExit = () => {
+  const handleExit = (groupId: GroupId) => {
     gateExited.current = true
-    history.pushState(null, '') // give the back button somewhere to land
+    sessionStorage.setItem('ees_role_group', groupId)
+    history.pushState(null, '')
     window.dispatchEvent(new Event('ees_role_selected'))
     setExiting(true)
     setTimeout(() => {
-      window.scrollTo(0, 0)
       document.body.style.overflow = ''
       setShow(false)
     }, EXIT_DURATION)
   }
 
-  const handleRoleSelect = (role: RoleOption) => {
-    if (!role.requiresEmail) {
-      sessionStorage.setItem('ees_role', role.id)
-      sessionStorage.setItem('ees_role_groups', role.groups)
-      handleExit()
+  const handleCardSelect = (card: GroupCard) => {
+    if (!card.requiresPassword) {
+      handleExit(card.id)
     } else {
-      setSelectedRole(role)
+      setSelectedCard(card)
       setDirection('forward')
-      setStep('email')
+      setStep('password')
     }
   }
 
   const handleBack = () => {
     setDirection('back')
-    setStep('role')
-    setEmail('')
+    setStep('cards')
+    setPassword('')
     setError('')
     setSuccess(false)
   }
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email.toLowerCase().includes('@ghn')) {
-      setError('Email không hợp lệ. Vui lòng sử dụng email GHN.')
+    if (password !== CORRECT_PASSWORD) {
+      setError('Mã xác minh không đúng. Vui lòng thử lại.')
       return
     }
     setError('')
     setSuccess(true)
-    sessionStorage.setItem('ees_role', selectedRole!.id)
-    sessionStorage.setItem('ees_role_groups', selectedRole!.groups)
-    sessionStorage.setItem('ees_verified_email', email.toLowerCase())
-    setTimeout(handleExit, 1000)
+    setTimeout(() => handleExit(selectedCard!.id), 1000)
   }
 
   if (!show) return null
@@ -251,17 +297,17 @@ export function RoleGate() {
       {/* ── Main content ── */}
       <div className="relative z-10 flex min-h-full flex-col items-center justify-center px-4 py-12">
         <AnimatePresence mode="wait" custom={direction}>
-          {step === 'role' ? (
-            /* ─── Step 1: Role selection ─── */
+          {step === 'cards' ? (
+            /* ─── Step 1: 6 group cards ─── */
             <motion.div
-              key="role"
+              key="cards"
               custom={direction}
               variants={slideVariants}
               initial="enter"
               animate="center"
               exit="exit"
               transition={slideTransition}
-              className="w-full max-w-4xl"
+              className="w-full max-w-5xl"
             >
               {/* Logo */}
               <div className="mb-8 flex justify-center">
@@ -278,28 +324,29 @@ export function RoleGate() {
               {/* Header */}
               <div className="mb-8 text-center">
                 <h1 className="font-heading text-[clamp(1.5rem,4vw,2.25rem)] font-black text-white">
-                  Bạn thuộc nhóm nào?
+                  Chọn nhóm khảo sát của bạn
                 </h1>
                 <p className="mt-2 text-sm text-white/50">
-                  Chọn đúng nhóm để trải nghiệm khảo sát phù hợp nhất
+                  Vui lòng chọn đúng vị trí công việc hiện tại
                 </p>
               </div>
 
-              {/* Cards */}
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                {ROLES.map((role) => (
-                  <RoleCard
-                    key={role.id}
-                    role={role}
-                    onSelect={() => handleRoleSelect(role)}
+              {/* 6 cards: 2 cols on mobile, 3 cols on desktop */}
+              <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+                {GROUP_CARDS.map((card, i) => (
+                  <GroupCardItem
+                    key={card.id}
+                    card={card}
+                    onSelect={() => handleCardSelect(card)}
+                    index={i}
                   />
                 ))}
               </div>
             </motion.div>
           ) : (
-            /* ─── Step 2: Email verification ─── */
+            /* ─── Step 2: Password verification (3A / 3B only) ─── */
             <motion.div
-              key="email"
+              key="password"
               custom={direction}
               variants={slideVariants}
               initial="enter"
@@ -326,20 +373,20 @@ export function RoleGate() {
                   </div>
                 </div>
 
-                {/* Selected role indicator */}
-                {selectedRole && (
+                {/* Selected group indicator */}
+                {selectedCard && (
                   <div className="mb-4 flex justify-center">
                     <span className="rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold text-white/60">
-                      {selectedRole.title}
+                      {selectedCard.badge} — {selectedCard.title}
                     </span>
                   </div>
                 )}
 
                 <h2 className="mb-1 text-center font-heading text-xl font-black text-white">
-                  Xác minh nhân viên GHN
+                  Xác minh quyền truy cập
                 </h2>
                 <p className="mb-6 text-center text-sm text-white/50">
-                  Vui lòng nhập email công ty để tiếp tục
+                  Nhập mã xác minh để tiếp tục
                 </p>
 
                 {success ? (
@@ -363,16 +410,15 @@ export function RoleGate() {
                     <p className="text-sm font-medium text-white/70">Xác minh thành công!</p>
                   </div>
                 ) : (
-                  <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
+                  <form onSubmit={handlePasswordSubmit} className="flex flex-col gap-3">
                     <input
-                      type="email"
-                      value={email}
+                      type="password"
+                      value={password}
                       onChange={(e) => {
-                        setEmail(e.target.value)
+                        setPassword(e.target.value)
                         setError('')
                       }}
-                      placeholder="name@ghn.vn"
-                      autoComplete="email"
+                      placeholder="Nhập mã xác minh"
                       autoFocus
                       className="h-12 w-full rounded-xl border border-white/15 bg-white/[0.08] px-4 text-sm text-white outline-none transition-all placeholder:text-white/30 focus:border-ghn-o1/60 focus:ring-2 focus:ring-ghn-o1/20"
                     />
