@@ -18,12 +18,9 @@
         "name": "next"
       }
     ],
-    "allowArbitraryExtensions": true,
-    "ignoreDeprecations": "5.0",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    }
+"paths": {
+  "@/*": ["./*"]
+}
   },
   "include": [
     "next-env.d.ts",
