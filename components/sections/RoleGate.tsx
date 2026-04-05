@@ -18,7 +18,10 @@ const LOGO_URL =
   'https://res.cloudinary.com/dtjghirnn/image/upload/v1774863548/LOGO_CHUAN_onyfcy.png'
 
 const EXIT_DURATION = 650
-const CORRECT_PASSWORD = 'GHN@2026'
+const GROUP_PASSWORDS: Record<string, string> = {
+  '3A': '3A@GHN',
+  '3B': '3B@GHN',
+}
 
 type GroupId = '1A' | '1B' | '2A' | '2B' | '3A' | '3B'
 
@@ -246,7 +249,8 @@ export function RoleGate() {
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (password !== CORRECT_PASSWORD) {
+    const correctPassword = selectedCard ? GROUP_PASSWORDS[selectedCard.id] : undefined
+    if (!correctPassword || password !== correctPassword) {
       setError('Mã xác minh không đúng. Vui lòng thử lại.')
       return
     }
