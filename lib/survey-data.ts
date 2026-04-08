@@ -48,7 +48,7 @@ export const surveyGroups: SurveyGroup[] = [
     description: 'AM/OM, Supervisor, TBC, Ops Team Leader.',
     theme: 'blue',
     category: 'office',
-    link: 'https://forms.google.com/example-2B',
+    link: 'https://forms.google.com/examp le-2B',
   },
   {
     id: '3A',
@@ -58,7 +58,7 @@ export const surveyGroups: SurveyGroup[] = [
     description: 'Dành cho chuyên viên, nhân viên khối Indirect HO.',
     theme: 'blue',
     category: 'office',
-    link: 'https://forms.google.com/example-3A',
+    link: 'https://forms.gle/t7L2U8E2pQULDngg7',
   },
   {
     id: '3B',

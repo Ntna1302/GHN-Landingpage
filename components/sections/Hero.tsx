@@ -158,7 +158,7 @@ export function Hero() {
             <strong className="relative text-white after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[2px] after:bg-ghn-o1/60 after:rounded-full">
                ý kiến
             </strong>{' '}
-            — Mỗi {' '}
+            — Một {' '}
             <strong className="relative text-white after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[2px] after:bg-ghn-b2/60 after:rounded-full">
               bước tiến
             </strong>{' '}
