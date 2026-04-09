@@ -179,8 +179,7 @@ function GroupCardItem({
 }
 
 /* ── RoleGate ──────────────────────────────────────────── */
-export function RoleGate() {
-  const [show, setShow] = useState(false)
+export function RoleGate({ onDone }: { onDone: () => void }) {
   const [exiting, setExiting] = useState(false)
   const [step, setStep] = useState<'cards' | 'password'>('cards')
   const [direction, setDirection] = useState<'forward' | 'back'>('forward')
@@ -188,44 +187,25 @@ export function RoleGate() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
-  const gateExited = useRef(false)
+
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const successTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useEffect(() => {
-    if (!sessionStorage.getItem('ees_role_group')) {
-      setShow(true)
-      document.body.style.overflow = 'hidden'
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = ''
+      clearTimeout(exitTimerRef.current)
+      clearTimeout(successTimerRef.current)
     }
-  }, [])
-
-  // Back button: re-show gate when user presses back after dismissing it
-  useEffect(() => {
-    const handlePopState = () => {
-      if (!gateExited.current) return
-      gateExited.current = false
-      sessionStorage.removeItem('ees_role_group')
-      setShow(true)
-      setExiting(false)
-      setStep('cards')
-      setSelectedCard(null)
-      setPassword('')
-      setError('')
-      setSuccess(false)
-      document.body.style.overflow = 'hidden'
-      history.pushState(null, '')
-    }
-    window.addEventListener('popstate', handlePopState)
-    return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
   const handleExit = (groupId: GroupId) => {
-    gateExited.current = true
     sessionStorage.setItem('ees_role_group', groupId)
-    history.pushState(null, '')
     window.dispatchEvent(new Event('ees_role_selected'))
     setExiting(true)
-    setTimeout(() => {
-      document.body.style.overflow = ''
-      setShow(false)
+    exitTimerRef.current = setTimeout(() => {
+      onDone()
     }, EXIT_DURATION)
   }
 
@@ -256,10 +236,8 @@ export function RoleGate() {
     }
     setError('')
     setSuccess(true)
-    setTimeout(() => handleExit(selectedCard!.id), 1000)
+    successTimerRef.current = setTimeout(() => handleExit(selectedCard!.id), 1000)
   }
-
-  if (!show) return null
 
   return (
     <motion.div

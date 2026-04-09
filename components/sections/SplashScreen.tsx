@@ -20,58 +20,34 @@ function phaseStyle(active: boolean): React.CSSProperties {
 }
 
 export function SplashScreen({ onDone }: { onDone?: () => void }) {
-  const [show, setShow] = useState(false)
   const [exiting, setExiting] = useState(false)
   const [phase, setPhase] = useState(1)
-
-  /* ── Show once per session / bfcache restore ── */
-  useEffect(() => {
-    const showSplash = () => {
-      setShow(true)
-      setExiting(false)
-      setPhase(1)
-      document.body.style.overflow = 'hidden'
-    }
-
-    if (!sessionStorage.getItem('ees_splash_seen')) {
-      showSplash()
-    }
-
-    const handlePageShow = (e: PageTransitionEvent) => {
-      if (e.persisted) showSplash()
-    }
-
-    window.addEventListener('pageshow', handlePageShow)
-    return () => window.removeEventListener('pageshow', handlePageShow)
-  }, [])
 
   /* ── Auto-advance phases ──
        Phase 1 (0–2s):   logo fades in, centered
        Phase 2 (2–3.5s): logo moves up + greeting
-       3.5s: auto-calls handleCTA → fades out → onDone()
+       3.5s: fades out → onDone()
   ── */
   useEffect(() => {
-    if (!show) return
-    const timers = [
-      setTimeout(() => setPhase(2), 2000),
-      setTimeout(() => handleCTA(), 3500),
-    ]
-    return () => timers.forEach(clearTimeout)
-  }, [show])
+    document.body.style.overflow = 'hidden'
 
-  const handleCTA = () => {
-    setExiting(true)
-    setTimeout(() => {
-      sessionStorage.setItem('ees_splash_seen', '1')
-      if (sessionStorage.getItem('ees_role')) {
+    const handleCTA = () => {
+      setExiting(true)
+      setTimeout(() => {
+        sessionStorage.setItem('ees_splash_seen', '1')
         document.body.style.overflow = ''
-      }
-      setShow(false)
-      onDone?.()
-    }, EXIT_DURATION)
-  }
+        onDone?.()
+      }, EXIT_DURATION)
+    }
 
-  if (!show) return null
+    const t1 = setTimeout(() => setPhase(2), 2000)
+    const t2 = setTimeout(handleCTA, 3500)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+      document.body.style.overflow = ''
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <motion.div

@@ -903,15 +903,6 @@
 //     }
 //   }, [current]) // eslint-disable-line react-hooks/exhaustive-deps
 
-//   // Browser back: if popping to splash or null → call onBack
-//   useEffect(() => {
-//     const handler = (e: PopStateEvent) => {
-//       if (e.state?.step === 'splash' || !e.state) onBack()
-//     }
-//     window.addEventListener('popstate', handler)
-//     return () => window.removeEventListener('popstate', handler)
-//   }, [onBack])
-
 //   const handleDotClick = (i: number) => {
 //     if (i === current) return
 //     setDir(i > current ? 1 : -1)
